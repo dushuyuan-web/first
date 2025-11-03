@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 900天纪念 💕</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 配置Tailwind主题 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        love: {
+                            50: '#FFF1F7',
+                            100: '#FFE4F0',
+                            200: '#FFCADF',
+                            300: '#FFAED6',
+                            400: '#FF80C6',
+                            500: '#FF50B5',
+                            600: '#FF21A5',
+                            700: '#E60090',
+                            800: '#C5007C',
+                            900: '#A40068'
+                        },
+                        gold: {
+                            400: '#FFD700',
+                            500: '#FFC107',
+                            600: '#FFB300'
+                        }
+                    },
+                    fontFamily: {
+                        love: ['"Ma Shan Zheng"', 'cursive', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(255, 0, 128, 0.3);
+            }
+            .heart-beat {
+                animation: heartbeat 1.5s ease-in-out infinite;
+            }
+            .float-animation {
+                animation: float 3s ease-in-out infinite;
+            }
+            .pulse-gold {
+                animation: pulseGold 2s ease-in-out infinite;
+            }
+            .bounce-animation {
+                animation: bounce 2s ease-in-out infinite;
+            }
+            .spin-animation {
+                animation: spin 3s linear infinite;
+            }
+            .typewriter {
+                animation: typewriter 4s steps(20) 1s both;
+            }
+        }
+    </style>
+    <!-- 中文字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <style>
+        /* 全局样式 */
+        body {
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #FFF1F7 0%, #FF80C6 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* 动画定义 */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.1); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.1); }
+            70% { transform: scale(1); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes pulseGold {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 215, 0, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        /* 粒子效果 */
+        .heart-particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .celebration-particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 15;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body class="min-h-screen font-love flex items-center justify-center p-4">
+    <!-- 粒子容器 -->
+    <div id="particles-container" class="fixed inset-0 pointer-events-none"></div>
+    <div id="celebration-container" class="fixed inset-0 pointer-events-none"></div>
+    
+    <!-- 主动画内容 -->
+    <div class="relative z-20 text-center max-w-md">
+        <!-- 主文字动画 -->
+        <div class="relative mb-8">
+            <div class="absolute -inset-6 bg-gradient-to-r from-love-400 to-gold-400 rounded-full blur-lg opacity-30 pulse-gold"></div>
+            <div class="bg-gradient-to-r from-love-500 to-gold-500 text-white text-2xl font-bold px-6 py-4 rounded-2xl shadow-xl relative z-10 float-animation">
+                <div class="typewriter overflow-hidden whitespace-nowrap">
+                    今天是我们在一起的第900天!
+                </div>
+            </div>
+        </div>
+        
+        <!-- 环绕爱心 -->
+        <div class="flex justify-center space-x-6 mb-4">
+            <div class="heart-beat bounce-animation">
+                <i class="fa fa-heart text-love-500 text-3xl"></i>
+            </div>
+            <div class="heart-beat bounce-animation" style="animation-delay: 0.3s;">
+                <i class="fa fa-heart text-gold-500 text-3xl"></i>
+            </div>
+            <div class="heart-beat bounce-animation" style="animation-delay: 0.6s;">
+                <i class="fa fa-heart text-love-400 text-3xl"></i>
+            </div>
+        </div>
+        
+        <!-- 浮动符号 -->
+        <div class="flex justify-center space-x-4">
+            <div class="float-animation spin-animation">
+                <i class="fa fa-star text-gold-400 text-xl"></i>
+            </div>
+            <div class="float-animation spin-animation" style="animation-delay: 1s;">
+                <i class="fa fa-heart text-love-500 text-xl"></i>
+            </div>
+            <div class="float-animation spin-animation" style="animation-delay: 2s;">
+                <i class="fa fa-music text-love-400 text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 自动开始动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面加载后立即开始庆祝效果
+            startCelebration();
+            
+            // 每5秒自动播放一次庆祝效果
+            setInterval(startCelebration, 1000);
+            
+            // 点击页面产生互动效果
+            document.addEventListener('click', function(event) {
+                createHeartParticles(event);
+            });
+        });
+        
+        // 开始庆祝效果
+        function startCelebration() {
+            const celebrationContainer = document.getElementById('celebration-container');
+            const symbols = ['🎉', '🎊', '❤️', '✨', '🌟', '💖'];
+            
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'celebration-particle';
+                
+                const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+                particle.textContent = symbol;
+                
+                // 随机位置
+                const left = Math.random() * window.innerWidth;
+                const top = Math.random() * window.innerHeight;
+                
+                particle.style.left = `${left}px`;
+                particle.style.top = `${top}px`;
+                particle.style.opacity = '0.8';
+                
+                celebrationContainer.appendChild(particle);
+                
+                // 随机动画
+                const duration = Math.random() * 3 + 2;
+                const endY = top - 200;
+                
+                particle.animate([
+                    { transform: 'translateY(0) scale(1)', opacity: 0.8 },
+                    { transform: `translateY(${endY}px) scale(0.5)`, opacity: 0 }
+                ], {
+                    duration: duration * 1000,
+                    easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
+                    fill: 'forwards'
+                });
+                
+                setTimeout(() => {
+                    if (celebrationContainer.contains(particle)) {
+                        celebrationContainer.removeChild(particle);
+                    }
+                }, duration * 1000);
+            }
+        }
+        
+        // 创建爱心粒子
+        function createHeartParticles(event) {
+            const particlesContainer = document.getElementById('particles-container');
+            const particleCount = 8;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'heart-particle';
+                
+                const size = Math.random() * 15 + 10;
+                const hue = Math.floor(Math.random() * 20) + 340;
+                const color = `hsl(${hue}, 80%, 65%)`;
+                
+                particle.innerHTML = '<i class="fa fa-heart"></i>';
+                particle.style.color = color;
+                particle.style.fontSize = `${size}px`;
+                particle.style.opacity = '0.7';
+                
+                particle.style.left = `${event.clientX}px`;
+                particle.style.top = `${event.clientY}px`;
+                
+                particlesContainer.appendChild(particle);
+                
+                const duration = Math.random() * 2 + 1;
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 80 + 40;
+                
+                const endX = Math.cos(angle) * distance;
+                const endY = Math.sin(angle) * distance - 60;
+                
+                particle.animate([
+                    { transform: 'translate(0, 0)', opacity: 0.7 },
+                    { transform: `translate(${endX}px, ${endY}px)`, opacity: 0 }
+                ], {
+                    duration: duration * 1000,
+                    easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
+                    fill: 'forwards'
+                });
+                
+                setTimeout(() => {
+                    if (particlesContainer.contains(particle)) {
+                        particlesContainer.removeChild(particle);
+                    }
+                }, duration * 1000);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 3后台管理系统</title>
+    <!-- 引入Vue 3 -->
+    <script src="https://unpkg.com/vue@3.2.47/dist/vue.global.js"></script>
+    <!-- 引入Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 全局样式重置和变量定义 - 粉色主题 */
+        :root {
+            --primary-color: #ff6b8b;
+            --primary-light: #ff9bb3;
+            --secondary-color: #d43872;
+            --text-color: #333;
+            --text-secondary: #64748b;
+            --bg-color: #fff9fc;
+            --card-bg: #ffffff;
+            --border-color: #ffdde5;
+            --success-color: #ff85a1;
+            --warning-color: #ff9c71;
+            --danger-color: #ff5277;
+            --shadow: 0 4px 6px -1px rgba(255, 107, 139, 0.1), 0 2px 4px -1px rgba(255, 107, 139, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(255, 107, 139, 0.1), 0 4px 6px -2px rgba(255, 107, 139, 0.05);
+            --radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            /* 渐变背景 - 粉色系 */
+            background: linear-gradient(135deg, var(--bg-color) 0%, #ffe6ec 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .search-form {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .form-control {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            flex: 1;
+            min-width: 200px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 107, 139, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            outline: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background-color: #ffb8c9;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: var(--radius);
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            position: relative;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 107, 139, 0.05);
+        }
+
+        /* 模态框样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* 空状态样式 */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--border-color);
+        }
+
+        /* 加载动画 */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .form-control {
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <div class="header">
+            <h1>用户管理系统</h1>
+        </div>
+        
+        <!-- 搜索表单 -->
+        <div class="search-form">
+            <input type="text" v-model="searchQuery" placeholder="搜索用户名" class="form-control">
+            <button @click="searchUser" class="btn btn-primary">
+                <i class="fas fa-search"></i> 搜索
+            </button>
+            <button @click="showAddModal = true" class="btn btn-primary">
+                <i class="fas fa-plus"></i> 添加用户
+            </button>
+        </div>
+        
+        <!-- 用户列表 -->
+        <div class="table-container">
+            <table v-if="filteredUsers.length > 0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>用户名</th>
+                        <th>邮箱</th>
+                        <th>角色</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="user in filteredUsers" :key="user.id">
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.role }}</td>
+                        <td>
+                            <button @click="editUser(user)" class="btn btn-secondary" style="margin-right: 8px;">
+                                <i class="fas fa-edit"></i> 编辑
+                            </button>
+                            <button @click="deleteUser(user.id)" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> 删除
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <!-- 空状态显示 -->
+            <div v-else class="empty-state">
+                <i class="fas fa-user-slash"></i>
+                <h3>暂无用户数据</h3>
+                <p>点击添加用户按钮创建第一个用户</p>
+            </div>
+        </div>
+        
+        <!-- 添加/编辑用户模态框 -->
+        <div v-if="showAddModal || showEditModal" class="modal" @click.self="cancelEdit">
+            <div class="modal-content">
+                <h3>{{ showAddModal ? '添加用户' : '编辑用户' }}</h3>
+                <div class="form-group">
+                    <label>用户名:</label>
+                    <input type="text" v-model="currentUser.name" class="form-control" placeholder="请输入用户名">
+                </div>
+                <div class="form-group">
+                    <label>邮箱:</label>
+                    <input type="email" v-model="currentUser.email" class="form-control" placeholder="请输入邮箱地址">
+                </div>
+                <div class="form-group">
+                    <label>角色:</label>
+                    <select v-model="currentUser.role" class="form-control">
+                        <option value="普通用户">普通用户</option>
+                        <option value="管理员">管理员</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button @click="cancelEdit" class="btn btn-secondary">取消</button>
+                    <button @click="saveUser" class="btn btn-primary">
+                        {{ isSaving ? '<span class="loader"></span>' : '' }}
+                        {{ showAddModal ? '添加' : '保存' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 使用Vue 3的全局对象
+        const { createApp, ref, computed } = Vue;
+        
+        createApp({
+            setup() {
+                // 响应式数据
+                const users = ref([
+                    { id: 1, name: '张三', email: 'zhangsan@example.com', role: '管理员' },
+                    { id: 2, name: '李四', email: 'lisi@example.com', role: '普通用户' },
+                    { id: 3, name: '王五', email: 'wangwu@example.com', role: '普通用户' }
+                ]);
+                
+                const searchQuery = ref('');
+                const showAddModal = ref(false);
+                const showEditModal = ref(false);
+                const isSaving = ref(false);
+                const currentUser = ref({
+                    id: '',
+                    name: '',
+                    email: '',
+                    role: '普通用户'
+                });
+                
+                // 计算属性
+                const filteredUsers = computed(() => {
+                    if (!searchQuery.value) {
+                        return users.value;
+                    }
+                    return users.value.filter(user => 
+                        user.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+                    );
+                });
+                
+                // 方法
+                const searchUser = () => {
+                    // 搜索逻辑已经在computed属性中实现
+                    console.log('搜索用户:', searchQuery.value);
+                };
+                
+                const editUser = (user) => {
+                    // 深拷贝用户对象
+                    currentUser.value = JSON.parse(JSON.stringify(user));
+                    showEditModal.value = true;
+                };
+                
+                const deleteUser = (id) => {
+                    if (confirm('确定要删除这个用户吗？')) {
+                        const index = users.value.findIndex(user => user.id === id);
+                        if (index !== -1) {
+                            users.value.splice(index, 1);
+                        }
+                    }
+                };
+                
+                const saveUser = () => {
+                    // 添加保存中的状态
+                    isSaving.value = true;
+                    
+                    // 模拟网络延迟
+                    setTimeout(() => {
+                        if (showAddModal.value) {
+                            // 添加新用户
+                            const newId = users.value.length > 0 ? Math.max(...users.value.map(u => u.id)) + 1 : 1;
+                            currentUser.value.id = newId;
+                            users.value.push({...currentUser.value});
+                        } else if (showEditModal.value) {
+                            // 编辑现有用户
+                            const index = users.value.findIndex(user => user.id === currentUser.value.id);
+                            if (index !== -1) {
+                                users.value.splice(index, 1, {...currentUser.value});
+                            }
+                        }
+                        
+                        isSaving.value = false;
+                        cancelEdit();
+                    }, 500);
+                };
+                
+                const cancelEdit = () => {
+                    currentUser.value = { id: '', name: '', email: '', role: '普通用户' };
+                    showAddModal.value = false;
+                    showEditModal.value = false;
+                    isSaving.value = false;
+                };
+                
+                // 返回需要在模板中使用的变量和方法
+                return {
+                    users,
+                    searchQuery,
+                    showAddModal,
+                    showEditModal,
+                    isSaving,
+                    currentUser,
+                    filteredUsers,
+                    searchUser,
+                    editUser,
+                    deleteUser,
+                    saveUser,
+                    cancelEdit
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
