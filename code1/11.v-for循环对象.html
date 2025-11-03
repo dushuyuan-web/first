@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 导入vue包 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.4.0/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 其中 val 表示对象中属性的值，key 表示对象中的属性名 ，
+         i表示当前属性在对象遍历中的索引（从 0 开始）-->
+
+         <!-- 在遍历对象身上的键值对的时候，除了有val，key ，在地三个位置还有索引 -->
+       <p v-for="(val,key,i) in user">值是: {{ val }} 
+                                  --- 键是：{{ key }} 
+                                   ---索引：{{i}}</p>
+    </div>
+    <script>
+     var vm = new Vue({
+        el:'#app',
+        data:{
+            user: {
+                id:1,
+                name:'tony.屎壳郎',
+                gender:'男'
+            }
+        },
+        methods:{
+
+        }
+     })
+    </script>
+</body>
+</html>

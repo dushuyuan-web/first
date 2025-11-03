@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 导入vue包 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.4.0/dist/vue.js"></script>
+    
+</head>
+<body>
+    <!-- 创建一个要控制的区域 -->
+    <div id="app">
+        <input type="button" value="浪起来" @click="lang">
+        <input type="button" value="低调" @click="stop">
+        <h4>{{ msg }}</h4>
+    </div>
+
+
+
+    <script>
+        //注意：再vm实例中，如果想要获取data上的数据，或者调用methods中的方法
+        // 必须通过this.数据属性名 或 this.方法名进行访问
+       var vm = new Vue({
+        el:'#app',
+        data:{
+            msg:'猥琐发育，别浪~~！',
+            intervalID : null                          //再data上定义 定时器Id
+        },
+        methods: {
+            lang() {
+                //console.log(this.msg)
+                
+              if(this.intervalID != null) return;      // 启动前先清除可能存在的旧定时器（避免多次点击导致加速） 
+              this.intervalID = setInterval( () => {   // 创建新定时器，将ID存入intervalID  
+              var start = this.msg.substring(0,1)      //截取到第一个字符 
+              var end = this.msg.substring(1)          //截取到后面的所有字符
+              this.msg = end + start                   //重新拼接得到新的字符串，并赋值给 this.msg
+            },400)
+            },
+            //注意，vm实例会监听data数据的变化，只要发生变化，
+            // 自动把最新数据从data中同步到页面上去
+            stop() {
+               clearInterval(this.intervalID)           // 清除定时器，停止滚动
+               this.intervalID = null;                  // 每当清除了定时器以后，需要重新把 intervalId 置于null
+            }
+    },
+})
+    </script>
+</body>
+</html>
